@@ -6,10 +6,9 @@ const fs = require("fs");
 const inquirer = require("inquirer");
 
 // requirements: employee, manager, engineer, intern
-const Employee = require("./Employee");
-const Manager = require("./Manager");
-const Engineer = require("./Engineer");
-const Intern = require("./Intern");
+const Manager = require("./lib/manager");
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
 
 // start employee profile generator - start inquirer
 function generateEmployee() {
@@ -19,13 +18,18 @@ function generateEmployee() {
       {
         name: "role",
         type: "list",
-        message: "What is the role of this new employee?",
+        message: "What is the role of your new employee?",
         choices: ["Manager", "Engineer", "Intern"],
       },
       {
         name: "name",
         type: "input",
         message: "Enter employee's full name",
+      },
+      {
+        name: "id",
+        type: "input",
+        message: "Enter employee's ID number",
       },
       {
         name: "email",
@@ -88,9 +92,10 @@ function generateEmployee() {
       } else generateHtml();
     });
 }
+generateEmployee();
 
 //create an HTML string literal. Note, if user doesn't continue, generate HTML function
-const generateHtml = ({}) => {
+const generateHtml = ({ role, name, id, email, officeNumber, gitHub, school }) => {
   return `<!DOCTYPE html>
   <html lang="en">
   
@@ -114,16 +119,32 @@ const generateHtml = ({}) => {
 
     <body>
     <section class="columns container is-centered is-multiline m-4">
-        ${generateEmployeeCards()}
+        ${employeeCards()}
     </section>
     </body>
     </html>
     `;
 };
 // inside of HTML loop through employees array to generate divs for cards
-function generateEmployeeCards() {
+function employeeCards() {
+  let card = "";
   // loop though employe array for cards
+  employeeArray.forEach((employee) => {
+    card += `
+      <div class="card column is-one-quarter m-3">
+            <div class="hero has-background-primary-light p-4">
+                <p class="title is-4 has-text-centered">${employee.name}</p>
+                <p class="subtitle is-5 has-text-centered">${employee.getRole()}</p>
+            </div>
+            <div class="card-content">
+                <p><span class="has-text-primary-dark has-text-weight-bold">ID:</span> ${employee.id}</p>
+                <p><span class="has-text-primary-dark has-text-weight-bold">Email:</span> ${employee.email}</p>
+                <p><span class="has-text-primary-dark has-text-weight-bold">Office Number:</span> 1</p>
+            </div>
+      `;
+    return card;
+  });
 }
 
 // write employees to html file
-fs.writeFile("teamProfile.html", generateHtml(employeeArray), (err) => (err ? console.error(err) : console.log("you made a Team Profile!")));
+fs.writeFile("teamProfile.html", generateHtml(employeeArray), (err) => (err ? console.error(err) : console.log("Congrats on your new Team!")));
