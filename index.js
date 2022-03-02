@@ -45,12 +45,8 @@ function generateEmployee() {
       {
         name: "gitHub",
         type: "input",
-        message: "Enter link to Engineer's github profile",
+        message: "Enter Engineer's GitHub profile name",
         when: (answers) => answers.role == "Engineer",
-        validate: function (input) {
-          const valid = input.startsWith("https://");
-          return valid || "please enter a valid website that includes https://";
-        },
       },
       {
         name: "school",
@@ -141,7 +137,8 @@ function employeeCards() {
             </div>
             <div class="card-content">
                 <p><span class="has-text-primary-dark has-text-weight-bold">ID:</span> ${employee.id}</p>
-                <p><span class="has-text-primary-dark has-text-weight-bold">Email:</span> ${employee.email}</p>
+                <p><span class="has-text-primary-dark has-text-weight-bold">Email:</span> <a href="mailto:${employee.email}"
+                        target="_blank">${employee.email}</a></p>
                 ${
                   employee.getRole() === "Manager"
                     ? `<p>
@@ -152,8 +149,8 @@ function employeeCards() {
                 ${
                   employee.getRole() === "Engineer"
                     ? `<p>
-                        <span class="has-text-primary-dark has-text-weight-bold">GitHub:</span>${employee.gitHub}
-                      </p>`
+                    <p><span class="has-text-primary-dark has-text-weight-bold">Github: </span><a href="https://github.com/${employee.gitHub}"
+                        target="_blank">${employee.gitHub}</a></p>`
                     : ""
                 }
                 ${
@@ -162,8 +159,7 @@ function employeeCards() {
                           <span class="has-text-primary-dark has-text-weight-bold">School:</span>${employee.school}
                         </p>`
                     : ""
-                }
-                
+                } 
             </div>
         </div>
       `;
