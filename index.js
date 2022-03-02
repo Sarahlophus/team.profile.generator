@@ -116,7 +116,7 @@ const generateHtml = () => {
       </header>
 
     <body>
-    <section class="columns container is-centered is-multiline m-4">
+    <section class="columns is-centered is-multiline m-4">
         ${employeeCards()}
     </section>
     </body>
