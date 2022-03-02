@@ -89,13 +89,15 @@ function generateEmployee() {
       // if user wants to create another employee, call this function again
       if (answers.addNew === true) {
         generateEmployee();
-      } else generateHtml();
+        // write employees to html file
+      } else {
+        fs.writeFile("teamProfile.html", generateHtml(), (err) => (err ? console.error(err) : console.log("Congrats on your new Team!")));
+      }
     });
 }
-generateEmployee();
 
 //create an HTML string literal. Note, if user doesn't continue, generate HTML function
-const generateHtml = ({ role, name, id, email, officeNumber, gitHub, school }) => {
+const generateHtml = () => {
   return `<!DOCTYPE html>
   <html lang="en">
   
@@ -128,23 +130,46 @@ const generateHtml = ({ role, name, id, email, officeNumber, gitHub, school }) =
 // inside of HTML loop through employees array to generate divs for cards
 function employeeCards() {
   let card = "";
+  console.log(employeeArray);
   // loop though employe array for cards
   employeeArray.forEach((employee) => {
     card += `
       <div class="card column is-one-quarter m-3">
-            <div class="hero has-background-primary-light p-4">
+            <div class="hero has-background-${employee.getColor()}-light p-4">
                 <p class="title is-4 has-text-centered">${employee.name}</p>
                 <p class="subtitle is-5 has-text-centered">${employee.getRole()}</p>
             </div>
             <div class="card-content">
                 <p><span class="has-text-primary-dark has-text-weight-bold">ID:</span> ${employee.id}</p>
                 <p><span class="has-text-primary-dark has-text-weight-bold">Email:</span> ${employee.email}</p>
-                <p><span class="has-text-primary-dark has-text-weight-bold">Office Number:</span> 1</p>
+                ${
+                  employee.getRole() === "Manager"
+                    ? `<p>
+                      <span class="has-text-primary-dark has-text-weight-bold">Office Number:</span>${employee.officeNumber}
+                    </p>`
+                    : ""
+                }
+                ${
+                  employee.getRole() === "Engineer"
+                    ? `<p>
+                        <span class="has-text-primary-dark has-text-weight-bold">GitHub:</span>${employee.gitHub}
+                      </p>`
+                    : ""
+                }
+                ${
+                  employee.getRole() === "Intern"
+                    ? `<p>
+                          <span class="has-text-primary-dark has-text-weight-bold">School:</span>${employee.school}
+                        </p>`
+                    : ""
+                }
+                
             </div>
+        </div>
       `;
-    return card;
   });
+  return card;
 }
 
-// write employees to html file
-fs.writeFile("teamProfile.html", generateHtml(employeeArray), (err) => (err ? console.error(err) : console.log("Congrats on your new Team!")));
+// call functions
+generateEmployee();
