@@ -126,7 +126,6 @@ const generateHtml = () => {
 // inside of HTML loop through employees array to generate divs for cards
 function employeeCards() {
   let card = "";
-  console.log(employeeArray);
   // loop though employe array for cards
   employeeArray.forEach((employee) => {
     card += `
